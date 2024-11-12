@@ -1,4 +1,4 @@
-package com.christianvladimir.simpletodo;
+package com.christianvladimir.todosimple;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
