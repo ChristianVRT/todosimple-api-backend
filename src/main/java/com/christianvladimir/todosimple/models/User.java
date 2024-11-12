@@ -5,6 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = User.TABLE_NAME)
@@ -31,7 +33,8 @@ public class User {
     @Size(groups = {CreateUser.class, UpdateUser.class},  min = 8, max = 60)
     private String password;
 
-    //private List<Task> = tasks = new ArrayList<Task>();
+    @OneToMany(mappedBy = "user")
+    private List<Task> tasks = new ArrayList<Task>();
 
     public User () {
     }
@@ -40,5 +43,6 @@ public class User {
         this.id = id;
         this.username = username;
         this.password = password;
+
     }
 }
