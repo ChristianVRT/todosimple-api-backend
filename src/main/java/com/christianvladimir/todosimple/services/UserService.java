@@ -23,17 +23,17 @@ public class UserService {
     }
 
     @Transactional
-    public User create(User obj) {
-        obj.setId(null);
-        obj = this.userRepository.save(obj);
-        return obj;
+    public User create(User user) {
+        user.setId(null);
+        user = this.userRepository.save(user);
+        return user;
     }
 
     @Transactional
-    public User update(User obj) {
-        User newObj = findById(obj.getId());
-        newObj.setPassword(obj.getPassword());
-        return this.userRepository.save(newObj);
+    public User update(User user) {
+        User newUser = findById(user.getId());
+        newUser.setPassword(user.getPassword());
+        return this.userRepository.save(newUser);
     }
 
     @Transactional

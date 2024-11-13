@@ -1,5 +1,6 @@
 package com.christianvladimir.todosimple.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import javax.persistence.*;
@@ -43,6 +44,10 @@ public class User {
         this.id = id;
         this.username = username;
         this.password = password;
+    }
 
+    @JsonIgnore
+    public List<Task> getTasks() {
+        return tasks;
     }
 }

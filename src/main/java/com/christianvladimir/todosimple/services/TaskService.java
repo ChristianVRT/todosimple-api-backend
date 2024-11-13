@@ -26,21 +26,22 @@ public class TaskService {
     }
 
     @Transactional
-    public Task Create(Task obj) {
-        User user = this.userService.findById(obj.getUser().getId());
-        obj.setId(null);
-        obj.setUser(user);
-        obj = this.taskRepository.save(obj);
-        return obj;
+    public Task Create(Task task) {
+        User user = this.userService.findById(task.getUser().getId());
+        task.setId(null);
+        task.setUser(user);
+        task = this.taskRepository.save(task);
+        return task;
     }
 
     @Transactional
-    public Task Update(Task obj) {
-        Task newObj = this.findById(obj.getId());
-        newObj.setDescription(obj.getDescription());
-        return this.taskRepository.save(newObj);
+    public Task Update(Task task) {
+        Task newTask = this.findById(task.getId());
+        newTask.setDescription(task.getDescription());
+        return this.taskRepository.save(newTask);
     }
 
+    @Transactional
     public void delete(Long id) {
         findById(id);
         try {
