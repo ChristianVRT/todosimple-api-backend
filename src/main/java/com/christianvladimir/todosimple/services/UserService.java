@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +21,14 @@ public class UserService {
         return user.orElseThrow(()-> new RuntimeException(
                 "Usuário não encontrado! Id: " + id + " Tipo: " + User.class.getName()
         ));
+    }
+
+    public List<User> findAll() {
+        List<User> users = this.userRepository.findAll();
+        if (users.isEmpty()) {
+            throw new RuntimeException("Nenhum usuário encontrado!");
+        }
+        return users;
     }
 
     @Transactional
@@ -45,6 +54,4 @@ public class UserService {
             throw new RuntimeException("Não é possível excluir pois há uma ou mais Tasks Relacionadas!");
         }
     }
-
-
 }

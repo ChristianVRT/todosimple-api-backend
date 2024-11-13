@@ -19,6 +19,12 @@ public class TaskService {
     @Autowired
     private UserService userService;
 
+
+    public List<Task> findAll (){
+        List<Task> tasks = this.taskRepository.findAll();
+        return tasks;
+    }
+
     public Task findById(Long id) {
         Optional<Task> task = taskRepository.findById(id);
         return task.orElseThrow(() -> new RuntimeException(
