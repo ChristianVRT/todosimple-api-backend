@@ -2,6 +2,7 @@ package com.christianvladimir.todosimple.controllers;
 
 import com.christianvladimir.todosimple.models.Task;
 import com.christianvladimir.todosimple.services.TaskService;
+import com.christianvladimir.todosimple.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +21,9 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/{id}")
     public ResponseEntity<Task> findById(@PathVariable Long id) {
         Task task = this.taskService.findById(id);
@@ -28,6 +32,7 @@ public class TaskController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Task>> findAllByUserId(@PathVariable Long userId) {
+        this.userService.findById(userId);
         List<Task> tasks = this.taskService.findAllByUserId(userId);
         return ResponseEntity.ok().body(tasks);
     }
