@@ -1,6 +1,9 @@
 package com.christianvladimir.todosimple.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -8,6 +11,8 @@ import javax.validation.constraints.Size;
 @Data
 @Entity
 @Table(name = Task.TABLE_NAME)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Task {
     public static final String TABLE_NAME = "task";
 
@@ -24,13 +29,5 @@ public class Task {
     @NotBlank
     @Size(min = 1, max = 255)
     private String description;
-
-    public Task() {}
-
-    public Task(Long id, User user, String description) {
-        this.id = id;
-        this.user = user;
-        this.description = description;
-    }
 
 }

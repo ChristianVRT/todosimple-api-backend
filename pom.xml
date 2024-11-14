@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.christianvladimir</groupId>
-	<artifactId>todosimple</artifactId>
+	<artifactId>todosimple-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>todosimple</name>
 	<description>Spring Boot API for To Do App</description>
@@ -60,6 +60,11 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
 		</dependency>
 	</dependencies>
 	<build>
