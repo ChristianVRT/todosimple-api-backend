@@ -33,6 +33,13 @@ public class UserService {
         ));
     }
 
+    public User findByUsername(String username) {
+        Optional<User> user = this.userRepository.findByUsername(username);
+        return user.orElseThrow(()-> new ObjectNotFoundException(
+                "Usuário não encontrado! Username: " + username + " Tipo: " + User.class.getName()
+        ));
+    }
+
     public List<User> findAll() {
         List<User> users = this.userRepository.findAll();
         if (users.isEmpty()) {
