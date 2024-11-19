@@ -36,7 +36,7 @@ public class JWTUtil {
             String username = claims.getSubject();
             Date expiration = claims.getExpiration();
             Date now = new Date(System.currentTimeMillis());
-            if (Objects.nonNull(username) && Objects.nonNull(expiration) && expiration.before(now))
+            if (Objects.nonNull(username) && Objects.nonNull(expiration) && now.before(expiration))
                 return true;
         }
         return false;
