@@ -30,10 +30,9 @@ public class TaskController {
         return ResponseEntity.ok().body(task);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Task>> findAllByUserId(@PathVariable Long userId) {
-        this.userService.findById(userId);
-        List<Task> tasks = this.taskService.findAllByUserId(userId);
+    @GetMapping("/user")
+    public ResponseEntity<List<Task>> findAllByUser() {
+        List<Task> tasks = this.taskService.findAllByUser();
         return ResponseEntity.ok().body(tasks);
     }
 
@@ -46,7 +45,7 @@ public class TaskController {
     @PostMapping
     @Validated
     public ResponseEntity<Void> create(@Valid @RequestBody Task task) {
-        this.taskService.Create(task);
+        this.taskService.create(task);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(task.getId()).toUri();
         return ResponseEntity.created(uri).build();
