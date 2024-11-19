@@ -1,5 +1,6 @@
 package com.christianvladimir.todosimple.exceptions;
 
+import com.christianvladimir.todosimple.services.exceptions.AuthorizationException;
 import com.christianvladimir.todosimple.services.exceptions.DataBindingViolationException;
 import com.christianvladimir.todosimple.services.exceptions.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 
 @Slf4j(topic = "GLOBAL_EXCEPTION_HANDLER")
 @RestControllerAdvice
@@ -56,6 +58,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
     public ResponseEntity<Object> handleDataBindingViolationException(DataBindingViolationException ex, WebRequest request) {
         log.error("Failed to save entity with associated data", ex);
         return buildErrorResponse(ex, HttpStatus.CONFLICT, request);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
+        log.error("Authentication error ", ex);
+        return buildErrorResponse(ex, HttpStatus.UNAUTHORIZED, request);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex, WebRequest request) {
+        log.error("Authorization error ", ex);
+        return buildErrorResponse(ex, HttpStatus.FORBIDDEN, request);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<Object> handleAuthorizationException(AuthorizationException ex, WebRequest request) {
+        log.error("Authorization error ", ex);
+        return buildErrorResponse(ex, HttpStatus.FORBIDDEN, request);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -91,7 +114,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
         }
         return ResponseEntity.status(status).body(errorResponse);
     }
-
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {

@@ -3,16 +3,19 @@ package com.christianvladimir.todosimple.services;
 import com.christianvladimir.todosimple.models.User;
 import com.christianvladimir.todosimple.models.enums.ProfileEnum;
 import com.christianvladimir.todosimple.repositories.UserRepository;
+import com.christianvladimir.todosimple.security.UserSpringSecurity;
+import com.christianvladimir.todosimple.services.exceptions.AuthorizationException;
 import com.christianvladimir.todosimple.services.exceptions.DataBindingViolationException;
 import com.christianvladimir.todosimple.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,6 +30,9 @@ public class UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User findById(Long id) {
+        UserSpringSecurity userSpringSecurity = authenticated();
+        if (!Objects.nonNull(userSpringSecurity) || !userSpringSecurity.hasRole(ProfileEnum.ADMIN) && !id.equals(userSpringSecurity.getId()))
+            throw new AuthorizationException("Acesso negado.");
         Optional<User> user = this.userRepository.findById(id);
         return user.orElseThrow(()-> new ObjectNotFoundException(
                 "Usuário não encontrado! Id: " + id + " Tipo: " + User.class.getName()
@@ -72,6 +78,14 @@ public class UserService {
             this.userRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             throw new DataBindingViolationException("Não é possível excluir pois há uma ou mais Tasks Relacionadas!");
+        }
+    }
+
+    public static UserSpringSecurity authenticated(){
+        try {
+            return (UserSpringSecurity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            return null;
         }
     }
 }
