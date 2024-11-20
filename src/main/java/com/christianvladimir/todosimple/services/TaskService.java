@@ -27,7 +27,7 @@ public class TaskService {
 
 
     public List<Task> findAll (){
-        List<Task> tasks = this.taskRepository.findAll();
+        List<Task> tasks = taskRepository.findAll();
         return tasks;
     }
 

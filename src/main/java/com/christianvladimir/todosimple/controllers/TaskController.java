@@ -5,6 +5,7 @@ import com.christianvladimir.todosimple.services.TaskService;
 import com.christianvladimir.todosimple.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -36,6 +37,7 @@ public class TaskController {
         return ResponseEntity.ok().body(tasks);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<Task>> findAll() {
         List<Task> tasks = this.taskService.findAll();
