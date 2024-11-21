@@ -1,6 +1,8 @@
 package com.christianvladimir.todosimple.services;
 
 import com.christianvladimir.todosimple.models.User;
+import com.christianvladimir.todosimple.models.dto.UserCreateDTO;
+import com.christianvladimir.todosimple.models.dto.UserUpdateDTO;
 import com.christianvladimir.todosimple.models.enums.ProfileEnum;
 import com.christianvladimir.todosimple.repositories.UserRepository;
 import com.christianvladimir.todosimple.security.UserSpringSecurity;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -66,8 +69,7 @@ public class UserService {
     @Transactional
     public User update(User user) {
         User newUser = findById(user.getId());
-        newUser.setPassword(user.getPassword());
-        newUser.setUsername(bCryptPasswordEncoder.encode(user.getPassword()));
+        newUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return this.userRepository.save(newUser);
     }
 
@@ -87,5 +89,19 @@ public class UserService {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public User fromDTO(@Valid UserCreateDTO obj) {
+        User user = new User();
+        user.setUsername(obj.getUsername());
+        user.setPassword(obj.getPassword());
+        return user;
+    }
+
+    public User fromDTO(@Valid UserUpdateDTO obj) {
+        User user = new User();
+        user.setId(obj.getId());
+        user.setPassword(obj.getPassword());
+        return user;
     }
 }
