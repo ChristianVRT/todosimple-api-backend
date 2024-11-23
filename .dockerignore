@@ -1,0 +1,8 @@
+**/target/
+**/docs/
+**/view/
+**/.git/
+**/README.md/
+**/CITATION.off/
+**/LICENSE/
+**/.editorconfig/
