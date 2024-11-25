@@ -42,6 +42,14 @@ public class UserService {
         ));
     }
 
+    public User findUser(){
+        UserSpringSecurity userSpringSecurity = authenticated();
+        if (!Objects.nonNull(userSpringSecurity))
+            throw new AuthorizationException("Acesso negado.");
+        Optional<User> user = this.userRepository.findById(userSpringSecurity.getId());
+        return user.orElseThrow(()-> new ObjectNotFoundException("Usuário não encontrado"));
+    }
+
     public User findByUsername(String username) {
         Optional<User> user = this.userRepository.findByUsername(username);
         return user.orElseThrow(()-> new ObjectNotFoundException(

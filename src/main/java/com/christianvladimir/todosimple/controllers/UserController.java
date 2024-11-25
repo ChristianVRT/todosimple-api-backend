@@ -23,9 +23,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id){
-        User user = this.userService.findById(id);
+    @GetMapping("/name")
+    public ResponseEntity<User> findUser(){
+        User user = this.userService.findUser();
         return ResponseEntity.ok().body(user);
     }
 
