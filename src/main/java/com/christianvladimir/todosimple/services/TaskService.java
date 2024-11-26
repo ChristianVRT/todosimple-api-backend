@@ -36,10 +36,10 @@ public class TaskService {
         Task task = taskRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
                 "Task não encontrada! Id: " + id + ", Tipo: " + Task.class.getName()));
 
-        UserSpringSecurity userSpringSecurity = UserService.authenticated();
-        if (Objects.isNull(userSpringSecurity) || !userSpringSecurity.hasRole(ProfileEnum.ADMIN) && !userHasTask(userSpringSecurity, task))
-            throw new AuthorizationException("Acesso Negado.");
-        return task;
+        UserSpringSecurity userSpringSecurity = userAuthenticated();
+        if (!userSpringSecurity.getId().equals(task.getUser().getId()))
+            throw new AuthorizationException("Essa atividade não pertence a você.");
+         return task;
     }
 
     public List<TaskProjection> findAllByUser (){
@@ -71,6 +71,7 @@ public class TaskService {
 
     @Transactional
     public void delete(Long id) {
+        UserSpringSecurity userSpringSecurity = userAuthenticated();
         findById(id);
         try {
             this.taskRepository.deleteById(id);
@@ -81,5 +82,12 @@ public class TaskService {
 
     private Boolean userHasTask(UserSpringSecurity userSpringSecurity, Task task) {
         return task.getUser().getId().equals(userSpringSecurity.getId());
+    }
+
+    private UserSpringSecurity userAuthenticated(){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+        if (Objects.isNull(userSpringSecurity))
+            throw new AuthorizationException("Acesso Negado.");
+        return userSpringSecurity;
     }
 }
