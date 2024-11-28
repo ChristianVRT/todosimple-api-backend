@@ -56,10 +56,17 @@ public class TaskService {
     }
 
     @Transactional
-    public Task Update(Task task) {
+    public void Update(Task task) {
+        UserSpringSecurity userSpringSecurity = userAuthenticated();
         Task newTask = this.findById(task.getId());
-        newTask.setDescription(task.getDescription());
-        return this.taskRepository.save(newTask);
+        if (!userSpringSecurity.getId().equals(newTask.getUser().getId()) || !userSpringSecurity.hasRole(ProfileEnum.ADMIN))
+            throw new AuthorizationException("Você não pode editar uma atividade que não pertence a você.");
+        try {
+            newTask.setDescription(task.getDescription());
+            this.taskRepository.save(newTask);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataBindingViolationException("Não é possível editar pois há um ou mais entidades Relacionadas!");
+        }
     }
 
     @Transactional
