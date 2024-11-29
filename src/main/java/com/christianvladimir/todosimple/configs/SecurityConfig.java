@@ -42,7 +42,8 @@ public class SecurityConfig {
     private static final String[] PUBLIC_MATCHERS_POST = {
             "/user",
             "/task",
-            "/login"
+            "/login",
+            "/swagger-ui.html"
     };
 
     @Bean
