@@ -5,6 +5,8 @@ import com.christianvladimir.todosimple.models.User;
 import com.christianvladimir.todosimple.models.dto.UserCreateDTO;
 import com.christianvladimir.todosimple.models.dto.UserUpdateDTO;
 import com.christianvladimir.todosimple.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,12 +19,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name = "User Controller", description = "Endpoint methods related to user management")
 @Validated
 public class UserController {
 
     @Autowired
     private UserService userService;
 
+    @Operation(summary = "Get every task from a user")
     @GetMapping("/name")
     public ResponseEntity<User> findUser(){
         User user = this.userService.findUser();
